@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Remove {{ object }} · Employee Management System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Remove Employee</h1>
+</div>
+<div class="card">
+  <div class="card-body p-4">
+    <p>Are you sure you want to remove <strong>{{ object }}</strong>? This can't be undone.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Yes, remove</button>
+      <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

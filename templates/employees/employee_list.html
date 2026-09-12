@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Employees · Employee Management System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Employees</h1>
+  <div class="d-flex gap-2">
+    <a href="{% url 'employee_export' %}?{{ querystring }}" class="btn btn-outline-primary"><i class="bi bi-download"></i> Export CSV</a>
+    <a href="{% url 'employee_add' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Employee</a>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        {{ filter_form.q.label_tag }}
+        {{ filter_form.q }}
+      </div>
+      <div class="col-md-3">
+        {{ filter_form.dept.label_tag }}
+        {{ filter_form.dept }}
+      </div>
+      <div class="col-md-2">
+        {{ filter_form.role.label_tag }}
+        {{ filter_form.role }}
+      </div>
+      <div class="col-md-2">
+        {{ filter_form.status.label_tag }}
+        {{ filter_form.status }}
+      </div>
+      <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-card">
+  {% if employees %}
+  <table class="table mb-0 align-middle">
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Department</th>
+        <th>Role</th>
+        <th>Salary</th>
+        <th>Status</th>
+        <th>Hired</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for emp in employees %}
+      <tr>
+        <td>
+          <a href="{% url 'employee_detail' emp.pk %}" class="d-flex align-items-center gap-2 text-decoration-none text-body">
+            <span class="avatar-badge">{{ emp.first_name|first|upper }}{{ emp.last_name|first|upper }}</span>
+            <div>
+              <div class="fw-semibold">{{ emp }}</div>
+              <div class="small text-muted">{{ emp.email|default:"—" }}</div>
+            </div>
+          </a>
+        </td>
+        <td>{{ emp.dept.name }}</td>
+        <td>{{ emp.role.name }}</td>
+        <td>${{ emp.salary }}{% if emp.bonus %}<span class="text-muted small"> +{{ emp.bonus }}</span>{% endif %}</td>
+        <td>
+          {% if emp.is_active %}
+            <span class="badge text-bg-success">Active</span>
+          {% else %}
+            <span class="badge text-bg-secondary">Inactive</span>
+          {% endif %}
+        </td>
+        <td>{{ emp.hire_date }}</td>
+        <td class="text-end">
+          <a href="{% url 'employee_edit' emp.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+          <a href="{% url 'employee_delete' emp.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-inbox" style="font-size:2rem;"></i>
+    <p class="mt-2 mb-0">No employees match your filters.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% if is_paginated %}
+<nav class="mt-3">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ querystring }}">Previous</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ querystring }}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Employee Management System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ title }}</h1>
+  <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+
+<div class="card">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.first_name.label_tag }}
+          {{ form.first_name }}
+          {{ form.first_name.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.last_name.label_tag }}
+          {{ form.last_name }}
+          {{ form.last_name.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.phone.label_tag }}
+          {{ form.phone }}
+          {{ form.phone.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.dept.label_tag }}
+          {{ form.dept }}
+          {{ form.dept.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.role.label_tag }}
+          {{ form.role }}
+          {{ form.role.errors }}
+        </div>
+        <div class="col-md-4">
+          {{ form.salary.label_tag }}
+          {{ form.salary }}
+          {{ form.salary.errors }}
+        </div>
+        <div class="col-md-4">
+          {{ form.bonus.label_tag }}
+          {{ form.bonus }}
+          {{ form.bonus.errors }}
+        </div>
+        <div class="col-md-4">
+          {{ form.hire_date.label_tag }}
+          {{ form.hire_date }}
+          {{ form.hire_date.errors }}
+        </div>
+        <div class="col-12 form-check ps-4">
+          {{ form.is_active }}
+          <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active employee</label>
+        </div>
+      </div>
+
+      <hr class="my-4">
+      <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+      <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

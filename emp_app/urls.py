@@ -1,29 +1,52 @@
-"""
-URL configuration for office_emp_m project.
+from django.urls import path
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name= 'index'),
-    path('all_emp', views.all_emp, name= 'view_all_emp'),
-    path('add_emp', views.add_emp, name= 'add_emp'),
-    path('remove_emp', views.remove_emp, name= 'remove_emp'),
-    path('remove_emp/<int:emp_id>', views.remove_emp, name= 'remove_emp'),
-    path('filter_emp', views.filter_emp, name= 'filter_emp'),
-
+    path("", views.DashboardView.as_view(), name="dashboard"),
+    # Employees
+    path("employees/", views.EmployeeListView.as_view(), name="employee_list"),
+    path("employees/export/", views.employee_export_csv, name="employee_export"),
+    path("employees/add/", views.EmployeeCreateView.as_view(), name="employee_add"),
+    path(
+        "employees/<int:pk>/",
+        views.EmployeeDetailView.as_view(),
+        name="employee_detail",
+    ),
+    path(
+        "employees/<int:pk>/edit/",
+        views.EmployeeUpdateView.as_view(),
+        name="employee_edit",
+    ),
+    path(
+        "employees/<int:pk>/delete/",
+        views.EmployeeDeleteView.as_view(),
+        name="employee_delete",
+    ),
+    # Departments
+    path("departments/", views.DepartmentListView.as_view(), name="department_list"),
+    path(
+        "departments/add/",
+        views.DepartmentCreateView.as_view(),
+        name="department_add",
+    ),
+    path(
+        "departments/<int:pk>/edit/",
+        views.DepartmentUpdateView.as_view(),
+        name="department_edit",
+    ),
+    path(
+        "departments/<int:pk>/delete/",
+        views.DepartmentDeleteView.as_view(),
+        name="department_delete",
+    ),
+    # Roles
+    path("roles/", views.RoleListView.as_view(), name="role_list"),
+    path("roles/add/", views.RoleCreateView.as_view(), name="role_add"),
+    path("roles/<int:pk>/edit/", views.RoleUpdateView.as_view(), name="role_edit"),
+    path(
+        "roles/<int:pk>/delete/",
+        views.RoleDeleteView.as_view(),
+        name="role_delete",
+    ),
 ]

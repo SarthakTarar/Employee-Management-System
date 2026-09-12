@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Employee Management System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ title }}</h1>
+  <a href="{% url 'department_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="card">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.name.label_tag }}
+          {{ form.name }}
+          {{ form.name.errors }}
+        </div>
+        <div class="col-md-6">
+          {{ form.location.label_tag }}
+          {{ form.location }}
+          {{ form.location.errors }}
+        </div>
+      </div>
+      <hr class="my-4">
+      <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+      <a href="{% url 'department_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

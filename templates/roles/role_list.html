@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Roles · Employee Management System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Roles</h1>
+  <a href="{% url 'role_add' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Role</a>
+</div>
+
+<div class="table-card">
+  {% if roles %}
+  <table class="table mb-0 align-middle">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Employees</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for role in roles %}
+      <tr>
+        <td class="fw-semibold">{{ role.name }}</td>
+        <td>{{ role.employees.count }}</td>
+        <td class="text-end">
+          <a href="{% url 'role_edit' role.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+          <a href="{% url 'role_delete' role.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-briefcase" style="font-size:2rem;"></i>
+    <p class="mt-2 mb-0">No roles yet. <a href="{% url 'role_add' %}">Add one</a>.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
