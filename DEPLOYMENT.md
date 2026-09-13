@@ -37,6 +37,33 @@ python manage.py createsuperuser
 python manage.py create_demo_data   # optional, only if the DB is empty
 ```
 
+## 3b. Set up the public demo account (optional but recommended if you're
+sharing the link)
+Every logged-in account has full CRUD access — no view-only tier exists yet —
+so a public demo account shares its data with a second, isolated Neon branch
+instead of your real one, and that branch gets wiped back to a fixed baseline
+every time the demo account logs in or out.
+
+1. In the Neon dashboard, **Branches → Create branch** off your main branch,
+   name it e.g. `demo`. Copy its connection string.
+2. Add to Vercel's env vars: `DEMO_DATABASE_URL` (that connection string) and
+   `DEMO_DATABASE_SSL_REQUIRE=True`.
+3. From your machine, seed it and create the login (the demo branch is a
+   *clone* of your main branch at creation time, so reset it rather than
+   relying on `create_demo_data`'s "only if empty" check):
+   ```bash
+   export DEMO_DATABASE_URL="postgresql://...demo branch connection string..."
+   python manage.py shell -c "from emp_app.demo_data import reset_demo_database; reset_demo_database()"
+
+   export DATABASE_URL="postgresql://...your real connection string..."
+   DEMO_USER_PASSWORD="pick-a-password" python manage.py create_demo_user
+   ```
+   `create_demo_user` always writes to the **default** database — the demo
+   account's login itself isn't isolated, only its employee/department/role
+   data is (see `emp_app/db_router.py` and `emp_app/signals.py`).
+4. Put the username/password in your README (or wherever you share the link)
+   so visitors can actually log in.
+
 ## 4. Deploy
 Either:
 - Push this repo to GitHub and import it in the Vercel dashboard (it will

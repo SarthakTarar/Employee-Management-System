@@ -64,6 +64,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "emp_app.middleware.DemoDatabaseMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -97,8 +98,22 @@ DATABASES = {
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
         ssl_require=env_bool("DATABASE_SSL_REQUIRE", default=False),
-    )
+    ),
+    "demo": dj_database_url.config(
+        env="DEMO_DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'demo.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=env_bool("DEMO_DATABASE_SSL_REQUIRE", default=False),
+    ),
 }
+
+# Any authenticated request from this account gets its emp_app reads/writes
+# transparently routed to the "demo" database above (see emp_app/db_router.py),
+# and that database gets wiped + reseeded on every login/logout of this
+# account (see emp_app/signals.py) — so the public demo always starts clean.
+DEMO_USERNAME = os.environ.get("DEMO_USERNAME", "demo")
+
+DATABASE_ROUTERS = ["emp_app.db_router.DemoRouter"]
 
 
 # Password validation
